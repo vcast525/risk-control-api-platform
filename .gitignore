@@ -1,0 +1,37 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python Cache Files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyCharm / JetBrains
+.idea/
+
+# Environment Variables
+.env
+.env.*
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# macOS System Files
+.DS_Store
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build and Distribution Files
+build/
+dist/
+*.egg-info/
+
+# Log Files
+*.log
