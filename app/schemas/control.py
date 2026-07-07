@@ -4,7 +4,7 @@ Pydantic schemas for control-related API requests and responses.
 
 from enum import Enum
 from pydantic import BaseModel, Field
-
+from datetime import datetime
 
 class ControlFrequency(str, Enum):
     daily = "Daily"
@@ -25,3 +25,44 @@ class ControlCreate(BaseModel):
     frequency: ControlFrequency
     status: ControlStatus = ControlStatus.active
     description: str | None = Field(default=None, max_length=500)
+
+class ControlUpdate(BaseModel):
+    control_name: str | None = Field(
+        default=None,
+        min_length=3,
+        max_length=100,
+    )
+    control_owner: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+    frequency: ControlFrequency | None = None
+    status: ControlStatus | None = None
+    description: str | None = Field(
+        default=None,
+        max_length=500,
+    )
+
+class ControlResponse(BaseModel):
+    id: int
+    control_name: str
+    control_owner: str
+    frequency: ControlFrequency
+    status: ControlStatus
+    description: str | None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class ControlListResponse(BaseModel):
+    message: str
+    count: int
+    controls: list[ControlResponse]
+
+class SingleControlResponse(BaseModel):
+    message: str
+    control: ControlResponse
