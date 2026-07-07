@@ -43,11 +43,21 @@ def create_control(db: Session, control: ControlCreate) -> dict:
         "control": created_control,
     }
 
-def retrieve_controls(db: Session) -> dict:
+def retrieve_controls(
+    db: Session,
+    status_filter: str | None = None,
+    control_owner: str | None = None,
+    frequency: str | None = None,
+) -> dict:
     """
-    Retrieve all control records.
+    Retrieve control records with optional filters.
     """
-    controls = get_all_controls(db=db)
+    controls = get_all_controls(
+        db=db,
+        status=status_filter,
+        control_owner=control_owner,
+        frequency=frequency,
+    )
 
     return {
         "message": "Controls retrieved successfully",

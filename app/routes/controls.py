@@ -38,11 +38,21 @@ def create_control_route(
     return create_control(db=db, control=control)
 
 @router.get("/", response_model=ControlListResponse)
-def get_controls_route(db: Session = Depends(get_db)):
+def get_controls_route(
+    status: str | None = None,
+    control_owner: str | None = None,
+    frequency: str | None = None,
+    db: Session = Depends(get_db),
+):
     """
-    Retrieve all control records.
+    Retrieve control records with optional filters.
     """
-    return retrieve_controls(db=db)
+    return retrieve_controls(
+        db=db,
+        status_filter=status,
+        control_owner=control_owner,
+        frequency=frequency,
+    )
 
 @router.get("/{control_id}", response_model=SingleControlResponse)
 def get_control_by_id_route(

@@ -46,11 +46,25 @@ def create_control(
 
     return db_control
 
-def get_all_controls(db: Session) -> list[Control]:
+def get_all_controls(
+    db: Session,
+    status: str | None = None,
+    control_owner: str | None = None,
+    frequency: str | None = None,
+) -> list[Control]:
     """
-    Retrieve all control records.
+    Retrieve control records with optional filters.
     """
     statement = select(Control)
+
+    if status:
+        statement = statement.where(Control.status == status)
+
+    if control_owner:
+        statement = statement.where(Control.control_owner == control_owner)
+
+    if frequency:
+        statement = statement.where(Control.frequency == frequency)
 
     return list(db.scalars(statement).all())
 
