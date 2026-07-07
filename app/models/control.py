@@ -5,7 +5,7 @@ SQLAlchemy model for control records.
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.config import Base
 
@@ -41,4 +41,13 @@ class Control(Base):
     updated_by_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"),
         nullable=True,
+    )
+    created_by: Mapped["User | None"] = relationship(
+        "User",
+        foreign_keys=[created_by_id],
+    )
+
+    updated_by: Mapped["User | None"] = relationship(
+        "User",
+        foreign_keys=[updated_by_id],
     )
