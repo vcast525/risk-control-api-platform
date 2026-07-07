@@ -5,8 +5,7 @@ from sqlalchemy import select
 
 from app.database.config import SessionLocal
 from app.models.control import Control
-
-
+from app.models.user import User
 
 sample_controls = [
     {
