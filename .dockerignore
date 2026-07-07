@@ -1,0 +1,38 @@
+## Python Virtual Environment
+.venv/
+
+## Python Cache Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+## Environment Variables and Secrets
+.env
+
+## Git Version Control
+.git/
+.gitignore
+
+## IDE Configuration
+.idea/
+.vscode/
+
+## Testing Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+## Local Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+## Operating System Files
+.DS_Store
+
+## Alembic Cache
+alembic/versions/__pycache__/
+
+## Application Logs
+*.log
