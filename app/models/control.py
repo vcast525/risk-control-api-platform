@@ -4,7 +4,7 @@ SQLAlchemy model for control records.
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.config import Base
@@ -32,4 +32,13 @@ class Control(Base):
         DateTime,
         default=datetime.utcnow,
         nullable=False,
+    )
+    created_by_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=True,
+    )
+
+    updated_by_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=True,
     )
