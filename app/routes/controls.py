@@ -42,16 +42,20 @@ def get_controls_route(
     status: str | None = None,
     control_owner: str | None = None,
     frequency: str | None = None,
+    offset: int = 0,
+    limit: int = 20,
     db: Session = Depends(get_db),
 ):
     """
-    Retrieve control records with optional filters.
+    Retrieve control records with optional filters and pagination.
     """
     return retrieve_controls(
         db=db,
         status_filter=status,
         control_owner=control_owner,
         frequency=frequency,
+        offset=offset,
+        limit=limit,
     )
 
 @router.get("/{control_id}", response_model=SingleControlResponse)

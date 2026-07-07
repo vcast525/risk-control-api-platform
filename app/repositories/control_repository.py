@@ -2,8 +2,8 @@
 Database operations for control records.
 """
 
-from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy import func, select
 
 from app.models.control import Control
 from app.schemas.control import ControlCreate, ControlUpdate
@@ -51,22 +51,48 @@ def get_all_controls(
     status: str | None = None,
     control_owner: str | None = None,
     frequency: str | None = None,
+    offset: int = 0,
+    limit: int = 20,
 ) -> list[Control]:
     """
-    Retrieve control records with optional filters.
+    Retrieve control records with optional filters and pagination.
     """
+    conditions = build_control_filter_conditions(
+        status=status,
+        control_owner=control_owner,
+        frequency=frequency,
+    )
+
     statement = select(Control)
 
-    if status:
-        statement = statement.where(Control.status == status)
+    if conditions:
+        statement = statement.where(*conditions)
 
-    if control_owner:
-        statement = statement.where(Control.control_owner == control_owner)
-
-    if frequency:
-        statement = statement.where(Control.frequency == frequency)
+    statement = statement.order_by(Control.id).offset(offset).limit(limit)
 
     return list(db.scalars(statement).all())
+
+def count_controls(
+    db: Session,
+    status: str | None = None,
+    control_owner: str | None = None,
+    frequency: str | None = None,
+) -> int:
+    """
+    Count total matching control records before pagination.
+    """
+    conditions = build_control_filter_conditions(
+        status=status,
+        control_owner=control_owner,
+        frequency=frequency,
+    )
+
+    statement = select(func.count()).select_from(Control)
+
+    if conditions:
+        statement = statement.where(*conditions)
+
+    return db.scalar(statement) or 0
 
 def get_control_by_id(
     db: Session,
@@ -111,3 +137,21 @@ def deactivate_control(
     db.refresh(db_control)
 
     return db_control
+
+def build_control_filter_conditions(
+    status: str | None = None,
+    control_owner: str | None = None,
+    frequency: str | None = None,
+):
+    conditions = []
+
+    if status:
+        conditions.append(Control.status == status)
+
+    if control_owner:
+        conditions.append(Control.control_owner == control_owner)
+
+    if frequency:
+        conditions.append(Control.frequency == frequency)
+
+    return conditions

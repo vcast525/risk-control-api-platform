@@ -6,12 +6,13 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.repositories.control_repository import (
+    count_controls,
     create_control as create_control_record,
+    deactivate_control as deactivate_control_record,
     get_active_control_by_name_and_owner,
     get_all_controls,
     get_control_by_id,
     update_control as update_control_record,
-    deactivate_control as deactivate_control_record,
 )
 
 from app.schemas.control import ControlCreate, ControlUpdate
@@ -48,7 +49,37 @@ def retrieve_controls(
     status_filter: str | None = None,
     control_owner: str | None = None,
     frequency: str | None = None,
+    offset: int = 0,
+    limit: int = 20,
 ) -> dict:
+    """
+    Retrieve control records with optional filters and pagination.
+    """
+    total = count_controls(
+        db=db,
+        status=status_filter,
+        control_owner=control_owner,
+        frequency=frequency,
+    )
+
+    controls = get_all_controls(
+        db=db,
+        status=status_filter,
+        control_owner=control_owner,
+        frequency=frequency,
+        offset=offset,
+        limit=limit,
+    )
+
+    return {
+        "message": "Controls retrieved successfully",
+        "count": len(controls),
+        "total": total,
+        "offset": offset,
+        "limit": limit,
+        "controls": controls,
+    }
+
     """
     Retrieve control records with optional filters.
     """

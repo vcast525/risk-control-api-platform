@@ -61,6 +61,9 @@ class ControlResponse(BaseModel):
 class ControlListResponse(BaseModel):
     message: str
     count: int
+    total: int
+    offset: int
+    limit: int
     controls: list[ControlResponse]
 
 class SingleControlResponse(BaseModel):

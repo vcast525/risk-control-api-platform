@@ -2,17 +2,22 @@
 Database configuration for the Risk Control API Platform.
 """
 
+import os
+
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-DATABASE_URL = "sqlite:///./risk_control.db"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL is None:
+    raise RuntimeError("DATABASE_URL environment variable is not set.")
 
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},
-)
+engine = create_engine(DATABASE_URL)
 
 
 SessionLocal = sessionmaker(
@@ -23,6 +28,7 @@ SessionLocal = sessionmaker(
 
 
 Base = declarative_base()
+
 
 def get_db():
     """
