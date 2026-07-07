@@ -7,7 +7,7 @@ Application entry point for the FastAPI backend.
 from fastapi import FastAPI
 
 from app.database.config import Base, engine
-from app.models import control
+from app.models import control, user
 from app.routes.controls import router as controls_router
 
 
