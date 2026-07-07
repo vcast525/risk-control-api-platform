@@ -44,6 +44,18 @@ class ControlUpdate(BaseModel):
         max_length=500,
     )
 
+class UserAuditResponse(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    role: str
+    department: str
+
+    model_config = {
+        "from_attributes": True
+    }
+
 class ControlResponse(BaseModel):
     id: int
     control_name: str
@@ -53,7 +65,10 @@ class ControlResponse(BaseModel):
     description: str | None
     created_at: datetime
     updated_at: datetime
-
+    created_by_id: int | None
+    updated_by_id: int | None
+    created_by: UserAuditResponse | None
+    updated_by: UserAuditResponse | None
     model_config = {
         "from_attributes": True
     }
